@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import './App.css'
-import musicSrc from './music/Aankhon Se Batana Dikshant 320 Kbps.mp3'
+
+const musicSrc = '/music/Aankhon Se Batana Dikshant 320 Kbps.mp3'
 
 // ─── Sequence configuration ────────────────────────────────────────────────
 const SEQUENCES = [
@@ -135,7 +136,7 @@ const PRELOAD_TARGET      = 6      // frames needed before hiding loader
 function getFramePath(seq, fi) {
   const num = String(fi).padStart(seq.pad, '0')
   // encodeURI handles spaces in folder/filename (e.g. "start 2" → "start%202")
-  return encodeURI(`/src/video/${seq.folder}/${seq.prefix}_${num}.png`)
+  return encodeURI(`/video/${seq.folder}/${seq.prefix}_${num}.png`)
 }
 const ALL_PATHS = SEQUENCES.map(seq =>
   Array.from({ length: seq.frameCount }, (_, i) => getFramePath(seq, i))
