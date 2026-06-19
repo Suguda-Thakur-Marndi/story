@@ -467,7 +467,7 @@ export default function App() {
 
   const [seqIndex,       setSeqIndex]       = useState(0)
   const [slideT,         setSlideT]         = useState(0)
-  const [showUI,         setShowUI]         = useState(true)
+  const [showUI,         setShowUI]         = useState(false)
   const [isLoaded,       setIsLoaded]       = useState(false)
   const [loadPct,        setLoadPct]        = useState(0)
   const [scrollPct,      setScrollPct]      = useState(0)
@@ -689,6 +689,7 @@ export default function App() {
 
         // 3. Shadow at seam
         if (nextImg && nextY > 2) {
+          ctx.globalCompositeOperation = 'source-over'
           const grd = ctx.createLinearGradient(0, nextY - 24, 0, nextY + 6)
           grd.addColorStop(0, 'rgba(0,0,0,0)')
           grd.addColorStop(1, 'rgba(0,0,0,0.4)')
@@ -704,6 +705,9 @@ export default function App() {
           drawFrameAt(ctx, lastGoodImg.current[si], cw, ch, 0)
         }
       }
+
+      // Always restore to source-over so nothing leaks into next frame
+      ctx.globalCompositeOperation = 'source-over'
 
       rafRef.current = requestAnimationFrame(render)
     }
@@ -896,8 +900,8 @@ export default function App() {
 
 
   const seq        = SEQUENCES[seqIndex]
-  // Hero shows before first scroll, scene text shows while scrolling
-  const heroVisible = isLoaded && scrollPct < 0.012
+  // Hero shows before first scroll (scrollPct === 0) and hides after slight scroll
+  const heroVisible = scrollPct < 0.012
 
   return (
     <div className="app-root">
